@@ -1,23 +1,50 @@
 <!-- TIC TAC TOE SPIEL -->
 <div class="game-container">
-  <h1>🎮 Tic Tac Toe Workshop</h1>
+  <h1>🎮 Tic Tac Toe</h1>
 
   <!-- Spielstatus anzeigen -->
   <div class="game-status">
-    <h2 id="status">Spieler X ist dran</h2>
+    <h2 id="game-status">{{ getStatusMessage() }}</h2>
   </div>
 
   <!-- Das Spielfeld (3x3 Grid) -->
-  <div class="game-board" id="gameBoard">
-    <button class="cell" data-index="0" (click)="makeMove(0)"></button>
-    <button class="cell" data-index="1" (click)="makeMove(1)"></button>
-    <button class="cell" data-index="2" (click)="makeMove(2)"></button>
-    <button class="cell" data-index="3" (click)="makeMove(3)"></button>
-    <button class="cell" data-index="4" (click)="makeMove(4)"></button>
-    <button class="cell" data-index="5" (click)="makeMove(5)"></button>
-    <button class="cell" data-index="6" (click)="makeMove(6)"></button>
-    <button class="cell" data-index="7" (click)="makeMove(7)"></button>
-    <button class="cell" data-index="8" (click)="makeMove(8)"></button>
+  <div class="game-board">
+    <button class="cell"
+            [class.player-x]="getCellValue(0) === 'X'"
+            [class.player-o]="getCellValue(0) === 'O'"
+            (click)="makeMove(0)">{{ getCellValue(0) }}</button>
+    <button class="cell"
+            [class.player-x]="getCellValue(1) === 'X'"
+            [class.player-o]="getCellValue(1) === 'O'"
+            (click)="makeMove(1)">{{ getCellValue(1) }}</button>
+    <button class="cell"
+            [class.player-x]="getCellValue(2) === 'X'"
+            [class.player-o]="getCellValue(2) === 'O'"
+            (click)="makeMove(2)">{{ getCellValue(2) }}</button>
+    <button class="cell"
+            [class.player-x]="getCellValue(3) === 'X'"
+            [class.player-o]="getCellValue(3) === 'O'"
+            (click)="makeMove(3)">{{ getCellValue(3) }}</button>
+    <button class="cell"
+            [class.player-x]="getCellValue(4) === 'X'"
+            [class.player-o]="getCellValue(4) === 'O'"
+            (click)="makeMove(4)">{{ getCellValue(4) }}</button>
+    <button class="cell"
+            [class.player-x]="getCellValue(5) === 'X'"
+            [class.player-o]="getCellValue(5) === 'O'"
+            (click)="makeMove(5)">{{ getCellValue(5) }}</button>
+    <button class="cell"
+            [class.player-x]="getCellValue(6) === 'X'"
+            [class.player-o]="getCellValue(6) === 'O'"
+            (click)="makeMove(6)">{{ getCellValue(6) }}</button>
+    <button class="cell"
+            [class.player-x]="getCellValue(7) === 'X'"
+            [class.player-o]="getCellValue(7) === 'O'"
+            (click)="makeMove(7)">{{ getCellValue(7) }}</button>
+    <button class="cell"
+            [class.player-x]="getCellValue(8) === 'X'"
+            [class.player-o]="getCellValue(8) === 'O'"
+            (click)="makeMove(8)">{{ getCellValue(8) }}</button>
   </div>
 
   <!-- Steuerungsbuttons -->
@@ -25,13 +52,20 @@
     <button class="restart-btn" (click)="restartGame()">🔄 Neues Spiel</button>
   </div>
 
-  <!-- Anleitung für die Teilnehmer -->
+  <!-- Spielregeln -->
   <div class="instructions">
-    <h3>📝 Eure Aufgaben:</h3>
+    <h3>📋 Spielregeln:</h3>
     <ul>
-      <li>✏️ Implementiert die <code>makeMove()</code> Funktion</li>
-      <li>🏆 Implementiert die <code>checkWinner()</code> Funktion</li>
-      <li>🔄 Implementiert die <code>restartGame()</code> Funktion</li>
+      <li>Spieler X beginnt</li>
+      <li>Klicke auf ein freies Feld</li>
+      <li>Drei in einer Reihe gewinnt!</li>
+      <li>Horizontal, vertikal oder diagonal</li>
     </ul>
+  </div>
+
+  <!-- Statistiken -->
+  <div class="stats">
+    <h3>📊 Statistiken:</h3>
+    <p>Öffne die Konsole (F12) um die Spielstatistiken zu sehen!</p>
   </div>
 </div>

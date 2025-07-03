@@ -1,26 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
-export class App implements OnInit {
-  protected title = 'tic-tac-toe';
-
-  // ========================================
-  // SPIELVARIABLEN (BEREITS VORGEGEBEN)
-  // ========================================
-
-  // Das Spielfeld als Array mit 9 Feldern (0-8)
+export class TicTacToeApp implements AfterViewInit {
+  // Spielfeld: 9 Felder (0-8), leer = '', X oder O
   board: string[] = ['', '', '', '', '', '', '', '', ''];
 
-  // Aktueller Spieler (X oder O)
-  currentPlayer: string = 'X';
+  // Aktueller Spieler
+  currentPlayer: 'X' | 'O' = 'X';
 
-  // Status des Spiels
+  // Ist das Spiel aktiv?
   gameActive: boolean = true;
 
   // Alle möglichen Gewinnkombinationen
@@ -31,142 +24,119 @@ export class App implements OnInit {
     [0, 3, 6], // Erste Spalte
     [1, 4, 7], // Zweite Spalte
     [2, 5, 8], // Dritte Spalte
-    [0, 4, 8], // Diagonale von links oben nach rechts unten
-    [2, 4, 6]  // Diagonale von rechts oben nach links unten
+    [0, 4, 8], // Diagonale \
+    [2, 4, 6]  // Diagonale /
   ];
 
-  // ========================================
-  // AUFGABE 1: SPIELZUG MACHEN
-  // ========================================
-
-  protected makeMove(index: number): void {
-    // TODO: Diese Funktion müsst ihr implementieren!
-    //
-    // Was soll passieren:
-    // 1. Prüfen ob das Feld schon belegt ist (board[index] !== '')
-    // 2. Prüfen ob das Spiel noch aktiv ist (gameActive)
-    // 3. Falls beide Bedingungen erfüllt sind:
-    //    - Setze den aktuellen Spieler in das Feld: board[index] = this.currentPlayer
-    //    - Aktualisiere die Anzeige: this.updateDisplay()
-    //    - Prüfe auf Gewinner: this.checkWinner()
-    //    - Wechsle den Spieler: this.switchPlayer()
-
-    console.log("🎯 Spielzug auf Feld", index, "- Implementiert diese Funktion!");
-
-    // HINWEIS: Entfernt diese Zeile und schreibt eure eigene Implementierung:
-    alert("⚠️ Diese Funktion muss noch implementiert werden!");
+  ngAfterViewInit(): void {
+    this.updateDisplay();
+    this.updateStatusMessage();
   }
 
-  // ========================================
-  // AUFGABE 2: GEWINNER PRÜFEN
-  // ========================================
+  // AUFGABE 1: makeMove() Funktion - EXAKT WIE IN LOESUNG
+  makeMove(index: number): void {
+    // Prüfen ob das Feld schon belegt ist oder das Spiel beendet ist
+    if (this.board[index] !== '' || !this.gameActive) {
+      return; // Nichts tun, wenn Feld belegt oder Spiel beendet
+    }
 
-  protected checkWinner(): void {
-    // TODO: Diese Funktion müsst ihr implementieren!
-    //
-    // Was soll passieren:
-    // 1. Durchlaufe alle Gewinnkombinationen (this.winConditions)
-    // 2. Für jede Kombination prüfe:
-    //    - Sind alle drei Felder gleich und nicht leer?
-    //    - Falls ja: Gewinner gefunden!
-    // 3. Falls Gewinner gefunden:
-    //    - Setze gameActive = false
-    //    - Zeige Gewinnermeldung an
-    // 4. Falls kein Gewinner aber Spielfeld voll:
-    //    - Unentschieden!
+    // Spielzug ausführen
+    this.board[index] = this.currentPlayer;
+    this.updateDisplay();
+    this.checkWinner();
 
-    console.log("🏆 Prüfe auf Gewinner - Implementiert diese Funktion!");
-
-    // HINWEIS: Hier ist ein Beispiel für eine Gewinnkombination:
-    // let [a, b, c] = this.winConditions[0]; // [0, 1, 2]
-    // if (this.board[a] !== '' && this.board[a] === this.board[b] && this.board[a] === this.board[c]) {
-    //   // Gewinner gefunden!
-    // }
+    // Nur Spieler wechseln, wenn das Spiel noch aktiv ist
+    if (this.gameActive) {
+      this.switchPlayer();
+    }
   }
 
-  // ========================================
-  // AUFGABE 3: SPIEL NEUSTARTEN
-  // ========================================
+  // AUFGABE 2: checkWinner() Funktion - EXAKT WIE IN LOESUNG
+  checkWinner(): void {
+    // Alle Gewinnkombinationen durchgehen
+    for (let condition of this.winConditions) {
+      let [a, b, c] = condition;
 
-  protected restartGame(): void {
-    // TODO: Diese Funktion müsst ihr implementieren!
-    //
-    // Was soll passieren:
-    // 1. Leere das Spielfeld: board = ['', '', '', '', '', '', '', '', '']
-    // 2. Setze Startspieler: currentPlayer = 'X'
-    // 3. Aktiviere das Spiel: gameActive = true
-    // 4. Aktualisiere die Anzeige: this.updateDisplay()
+      // Prüfen ob alle drei Felder gleich und nicht leer sind
+      if (this.board[a] !== '' &&
+          this.board[a] === this.board[b] &&
+          this.board[a] === this.board[c]) {
 
-    console.log("🔄 Spiel wird neugestartet - Implementiert diese Funktion!");
+        // Gewinner gefunden!
+        this.gameActive = false;
+        this.showWinnerMessage(this.board[a]);
+        return;
+      }
+    }
 
-    // HINWEIS: Entfernt diese Zeile und schreibt eure eigene Implementierung:
-    alert("⚠️ Diese Funktion muss noch implementiert werden!");
+    // Prüfen auf Unentschieden (alle Felder voll, aber kein Gewinner)
+    if (this.isBoardFull()) {
+      this.gameActive = false;
+      this.showWinnerMessage('draw');
+    }
   }
 
-  // ========================================
-  // HILFSFUNKTIONEN (BEREITS IMPLEMENTIERT)
-  // ========================================
+  // AUFGABE 3: restartGame() Funktion - EXAKT WIE IN LOESUNG
+  restartGame(): void {
+    // Spielfeld leeren
+    this.board = ['', '', '', '', '', '', '', '', ''];
 
-  // Wechselt zwischen den Spielern X und O
+    // Spieler zurücksetzen
+    this.currentPlayer = 'X';
+
+    // Spiel aktivieren
+    this.gameActive = true;
+
+    // Anzeige aktualisieren
+    this.updateDisplay();
+    this.updateStatusMessage();
+  }
+
+  // Hilfsfunktionen - vereinfacht
   private switchPlayer(): void {
     this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
     this.updateStatusMessage();
   }
 
-  // Aktualisiert die Spielfeld-Anzeige
-  private updateDisplay(): void {
-    const cells = document.querySelectorAll('.cell');
-    cells.forEach((cell, index) => {
-      const button = cell as HTMLButtonElement;
-      button.textContent = this.board[index];
-
-      // Färbe X und O unterschiedlich
-      if (this.board[index] === 'X') {
-        button.style.color = '#e74c3c';
-      } else if (this.board[index] === 'O') {
-        button.style.color = '#3498db';
-      }
-    });
-  }
-
-  // Aktualisiert die Statusnachricht
-  private updateStatusMessage(): void {
-    const statusElement = document.getElementById('status');
-    if (statusElement) {
-      if (this.gameActive) {
-        statusElement.textContent = `Spieler ${this.currentPlayer} ist dran`;
-      }
-    }
-  }
-
-  // Zeigt eine Gewinnermeldung an
-  protected showWinnerMessage(winner: string): void {
-    const statusElement = document.getElementById('status');
-    if (statusElement) {
-      if (winner === 'draw') {
-        statusElement.textContent = '🤝 Unentschieden!';
-      } else {
-        statusElement.textContent = `🎉 Spieler ${winner} hat gewonnen!`;
-      }
-    }
-  }
-
-  // Prüft ob das Spielfeld voll ist
-  protected isBoardFull(): boolean {
+  private isBoardFull(): boolean {
     return this.board.every(cell => cell !== '');
   }
 
-  // ========================================
-  // INITIALISIERUNG
-  // ========================================
+  private updateDisplay(): void {
+    const cells = document.querySelectorAll('.cell');
+    cells.forEach((cell, index) => {
+      const cellElement = cell as HTMLElement;
+      cellElement.textContent = this.board[index];
+    });
+  }
 
-  ngOnInit(): void {
-    this.updateDisplay();
-    this.updateStatusMessage();
-    console.log("🎮 Tic Tac Toe Workshop gestartet!");
-    console.log("📝 Eure Aufgaben:");
-    console.log("   1. makeMove() Funktion implementieren");
-    console.log("   2. checkWinner() Funktion implementieren");
-    console.log("   3. restartGame() Funktion implementieren");
+  private updateStatusMessage(): void {
+    const statusElement = document.getElementById('game-status');
+    if (statusElement && this.gameActive) {
+      statusElement.textContent = `Spieler ${this.currentPlayer} ist dran`;
+    }
+  }
+
+  private showWinnerMessage(winner: string): void {
+    const statusElement = document.getElementById('game-status');
+    if (statusElement) {
+      if (winner === 'draw') {
+        statusElement.textContent = 'Unentschieden!';
+      } else {
+        statusElement.textContent = `Spieler ${winner} hat gewonnen!`;
+      }
+    }
+  }
+
+  // Für Template-Binding
+  getCellValue(index: number): string {
+    return this.board[index];
+  }
+
+  getStatusMessage(): string {
+    if (this.gameActive) {
+      return `Spieler ${this.currentPlayer} ist dran`;
+    }
+    return '';
   }
 }
