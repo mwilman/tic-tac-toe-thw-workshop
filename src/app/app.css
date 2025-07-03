@@ -1,0 +1,140 @@
+/* TIC TAC TOE WORKSHOP STYLES */
+
+.game-container {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.game-status h2 {
+  background: rgba(255,255,255,0.2);
+  padding: 15px;
+  border-radius: 10px;
+  margin: 20px 0;
+  font-size: 1.5em;
+}
+
+/* Das 3x3 Spielfeld */
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  margin: 20px auto;
+  max-width: 300px;
+  background: rgba(255,255,255,0.1);
+  padding: 10px;
+  border-radius: 15px;
+}
+
+/* Einzelne Spielfeld-Zellen */
+.cell {
+  width: 90px;
+  height: 90px;
+  font-size: 2.5em;
+  font-weight: bold;
+  background: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #333;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.cell:hover {
+  background: #f0f0f0;
+  transform: scale(1.05);
+}
+
+.cell:active {
+  transform: scale(0.95);
+}
+
+/* Spiel-Steuerung */
+.game-controls {
+  margin: 20px 0;
+}
+
+.restart-btn {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.2em;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+}
+
+.restart-btn:hover {
+  background: #ff5252;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255,107,107,0.6);
+}
+
+/* Anweisungen für die Teilnehmer */
+.instructions {
+  background: rgba(255,255,255,0.1);
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 30px;
+  text-align: left;
+}
+
+.instructions h3 {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 1.3em;
+}
+
+.instructions ul {
+  list-style: none;
+  padding: 0;
+}
+
+.instructions li {
+  background: rgba(255,255,255,0.1);
+  margin: 10px 0;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 1.1em;
+}
+
+.instructions code {
+  background: rgba(255,255,255,0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  color: #ffeb3b;
+}
+
+/* Responsive Design für kleinere Bildschirme */
+@media (max-width: 600px) {
+  .game-container {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  .cell {
+    width: 70px;
+    height: 70px;
+    font-size: 2em;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+}
